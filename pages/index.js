@@ -186,8 +186,8 @@ function Home() {
         <header className="topbar">
           <div className="brand">
             <div>
-              <div className="brand-label">PEZA</div>
-              <h1>GAP Portal</h1>
+              <div className="brand-label">Cluster 1</div>
+              <h1>Cluster 1 Portal</h1>
             </div>
             <div className="section-tabs">
               {[
