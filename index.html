@@ -1,717 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-50">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PEZA CLUSTER 1 Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f8fafc;
-  --sidebar:#ffffff;
-  --panel:#f1f5f9;
-  --card:#ffffff;
-  --card-hover:#f8fafc;
-  --border:#e2e8f0;
-  --border-bright:#cbd5e1;
-  --text:#0f172a;
-  --muted:#64748b;
-  --hint:#94a3b8;
-  --accent:#3b82f6;
-  --accent-dim:#eff6ff;
-  --accent2:#10b981;
-  --accent2-dim:#ecfdf5;
-  --amber:#f59e0b;
-  --amber-dim:#fffbeb;
-  --rose:#f43f5e;
-  --rose-dim:#fff1f2;
-  --purple:#8b5cf6;
-  --purple-dim:#f5f3ff;
-}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-size:16px;line-height:1.5}
-
-/* AUTH LAYER SCREEN styling */
-#auth-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  background: var(--bg);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-}
-.auth-card {
-  background: var(--card);
-  padding: 2.5rem;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.03);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-}
-.auth-input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid var(--border-bright);
-  border-radius: 8px;
-  font-size: 15px;
-  outline: none;
-  font-family: 'Inter', sans-serif;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  margin-top: 0.5rem;
-}
-.auth-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
-}
-.auth-btn {
-  width: 100%;
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-  margin-top: 1.5rem;
-}
-.auth-btn:hover { background: #2563eb; }
-.auth-btn:active { opacity: 0.9; }
-.auth-error-msg {
-  color: var(--rose);
-  font-size: 13px;
-  font-weight: 500;
-  margin-top: 0.5rem;
-  text-align: left;
-  display: none;
-}
-
-/* APP MAIN CONTAINER WRAPPER (Hidden by default) */
-#app-wrapper {
-  display: none;
-  width: 100%;
-  min-height: 100vh;
-}
-
-/* SIDEBAR */
-#sidebar{
-  width:290px;min-width:290px;background:var(--sidebar);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  position:sticky;top:0;height:100vh;overflow-y:auto;
-  padding:0 0 2rem;
-}
-.sidebar-brand{
-  padding:2rem 1.75rem 1.5rem;
-  border-bottom:1px solid var(--border);
-  margin-bottom:0.75rem;
-}
-.brand-badge{
-  display:inline-flex;align-items:center;gap:10px;margin-bottom:12px;
-}
-.brand-dot{
-  width:11px;height:11px;border-radius:50%;background:var(--accent2);
-  box-shadow:0 0 14px rgba(16,185,129,0.4);
-}
-.brand-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent2)}
-.brand-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--text);line-height:1.15}
-.brand-sub{font-size:13px;color:var(--muted);margin-top:6px}
-
-.nav-section{padding:1.5rem 1.75rem 0.5rem;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--hint)}
-.nav-item{
-  display:flex;align-items:center;gap:14px;
-  padding:15px 1.75rem;
-  color:var(--muted);font-size:15px;font-weight:500;
-  cursor:pointer;transition:background 0.1s,color 0.1s,border-color 0.1s;
-  border-left:3px solid transparent;
-  text-decoration:none;
-  min-height:54px;
-}
-.nav-item:hover{color:var(--text);background:var(--panel);border-left-color:var(--border-bright)}
-.nav-item.active{color:var(--accent);background:var(--accent-dim);border-left-color:var(--accent)}
-.nav-item:active{background:var(--border)}
-.nav-item .nav-icon{font-size:20px;opacity:0.7;width:24px;text-align:center;flex-shrink:0}
-.nav-item.active .nav-icon{opacity:1}
-.nav-count{margin-left:auto;font-size:12px;background:var(--panel);color:var(--muted);padding:3px 10px;border-radius:12px;font-weight:600;flex-shrink:0;border:1px solid var(--border)}
-
-.sidebar-footer{margin-top:auto;padding:1.5rem 1.75rem 0;border-top:1px solid var(--border)}
-.sidebar-footer p{font-size:12px;color:var(--hint);line-height:1.8}
-
-/* MAIN */
-#main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
-
-/* TOP BAR */
-.topbar{
-  padding:1.5rem 2.5rem;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--bg);
-  position:sticky;top:0;z-index:10;
-  min-height:80px;
-}
-.topbar-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text)}
-.topbar-sub{font-size:13px;color:var(--muted);margin-top:4px}
-.topbar-right{display:flex;gap:10px;align-items:center;flex-shrink:0}
-.tab-pill{
-  padding:11px 24px;border-radius:30px;font-size:14px;font-weight:600;
-  cursor:pointer;border:1px solid var(--border);color:var(--muted);
-  background:var(--card);font-family:'Inter',sans-serif;
-  transition:all 0.1s;min-height:44px;
-}
-.tab-pill:hover{border-color:var(--border-bright);color:var(--text);background:var(--card-hover)}
-.tab-pill:active{opacity:0.75}
-.tab-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 20px rgba(59,130,246,0.35)}
-
-/* CONTENT */
-#content{padding:2rem 2.5rem;overflow-y:auto}
-.section{display:none}
-.section.active{display:block}
-
-/* SECTION HEADER */
-.sec-head{
-  display:flex;align-items:center;gap:16px;margin-bottom:1.75rem;padding-bottom:1.25rem;
-  border-bottom:1px solid var(--border);
-}
-.sec-head-icon{
-  width:46px;height:46px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;font-size:22px;
-  flex-shrink:0;
-}
-.sec-head h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--text)}
-.sec-head span{font-size:13px;color:var(--muted);margin-left:auto;white-space:nowrap}
-
-/* SYSTEM CARDS GRID */
-.sys-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-bottom:2.5rem}
-.sys-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:16px;padding:22px;
-  text-decoration:none;color:var(--text);
-  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s,background 0.15s;
-  display:flex;flex-direction:column;gap:14px;
-  min-height:110px;
-}
-.sys-card:hover{background:var(--card-hover);border-color:var(--border-bright);transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,0.06)}
-.sys-card:active{transform:translateY(-1px);box-shadow:0 4px 8px rgba(0,0,0,0.04)}
-.sys-card-top{display:flex;align-items:center;justify-content:space-between}
-.sys-tag{
-  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  padding:4px 10px;border-radius:6px;
-}
-.sys-arrow{font-size:18px;color:var(--hint);transition:color 0.15s}
-.sys-card:hover .sys-arrow{color:var(--accent)}
-.sys-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);line-height:1.3}
-.sys-desc{font-size:13px;color:var(--muted);line-height:1.5}
-
-/* COLOR VARIANTS */
-.v-blue .sys-tag{background:var(--accent-dim);color:var(--accent)}
-.v-blue:hover{border-color:rgba(59,130,246,0.3);box-shadow:0 12px 24px rgba(59,130,246,0.1)}
-.v-green .sys-tag{background:var(--accent2-dim);color:var(--accent2)}
-.v-green:hover{border-color:rgba(16,185,129,0.3);box-shadow:0 12px 24px rgba(16,185,129,0.1)}
-.v-amber .sys-tag{background:var(--amber-dim);color:var(--amber)}
-.v-amber:hover{border-color:rgba(245,158,11,0.3);box-shadow:0 12px 24px rgba(245,158,11,0.1)}
-.v-rose .sys-tag{background:var(--rose-dim);color:var(--rose)}
-.v-rose:hover{border-color:rgba(244,63,94,0.3);box-shadow:0 12px 24px rgba(244,63,94,0.1)}
-.v-purple .sys-tag{background:var(--purple-dim);color:var(--purple)}
-.v-purple:hover{border-color:rgba(139,92,246,0.3);box-shadow:0 12px 24px rgba(139,92,246,0.1)}
-
-/* LINK ROWS */
-.link-group{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:1.25rem;overflow:hidden}
-.link-group-header{
-  padding:16px 22px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:12px;
-  background:var(--card);
-}
-.link-group-header .lgh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.link-group-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);letter-spacing:0.3px}
-.link-group-header .lgh-count{margin-left:auto;font-size:12px;color:var(--muted)}
-.link-row{
-  display:flex;align-items:center;padding:16px 22px;
-  border-bottom:1px solid var(--border);
-  text-decoration:none;color:var(--muted);
-  font-size:15px;transition:background 0.08s,color 0.08s;gap:14px;
-  min-height:54px;
-  background:var(--card);
-}
-.link-row:last-child{border-bottom:none}
-.link-row:hover{background:var(--card-hover);color:var(--text)}
-.link-row:active{background:var(--border)}
-.link-row .lr-name{flex:1}
-.link-row .lr-tag{font-size:11px;font-family:'Inter',sans-serif;font-weight:700;padding:3px 10px;border-radius:5px;flex-shrink:0;letter-spacing:0.5px}
-.link-row .lr-arr{font-size:18px;color:var(--hint);flex-shrink:0;transition:color 0.1s}
-.link-row:hover .lr-arr{color:var(--accent)}
-
-/* TWO COL */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:2rem}
-@media(max-width:800px){.two-col{grid-template-columns:1fr}}
-
-/* COMPANY GRID (ledgers/auth) */
-.co-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px;margin-bottom:2rem}
-.co-item{
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:16px 18px;text-decoration:none;
-  display:flex;flex-direction:column;gap:6px;
-  transition:background 0.1s,border-color 0.1s;
-  min-height:64px;
-}
-.co-item:hover{background:var(--card-hover);border-color:var(--border-bright)}
-.co-item:active{background:var(--border)}
-.co-item .co-type{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--hint)}
-.co-item .co-name{font-size:15px;font-weight:600;color:var(--text)}
-
-/* REF GRID */
-.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px;margin-bottom:2rem}
-.ref-card{
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:20px 22px;text-decoration:none;color:var(--text);
-  transition:background 0.12s,border-color 0.12s,box-shadow 0.12s;display:flex;flex-direction:column;gap:8px;
-  min-height:80px;
-}
-.ref-card:hover{background:var(--card-hover);border-color:rgba(245,158,11,0.3);box-shadow:0 8px 16px rgba(245,158,11,0.1)}
-.ref-card:active{opacity:0.85}
-.ref-card .ref-mo{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);font-family:'Syne',sans-serif}
-.ref-card .ref-name{font-size:17px;font-weight:600;color:var(--text)}
-
-/* MANUAL CARD */
-.manual-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:2rem}
-.manual-chip{
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:16px 24px;text-decoration:none;color:var(--muted);font-size:15px;font-weight:500;
-  display:flex;align-items:center;gap:12px;transition:all 0.12s;
-  min-height:54px;
-}
-.manual-chip:hover{color:var(--text);border-color:rgba(16,185,129,0.3);background:var(--card-hover);box-shadow:0 6px 16px rgba(16,185,129,0.1)}
-.manual-chip:active{opacity:0.8}
-.manual-chip span{font-size:11px;background:var(--accent2-dim);color:var(--accent2);padding:3px 10px;border-radius:5px;font-weight:700;letter-spacing:0.5px}
-
-/* EMPTY / placeholder */
-.empty{color:var(--muted);font-size:16px;padding:3rem;text-align:center}
-
-/* SCROLLBAR */
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:5px}
-::-webkit-scrollbar-thumb:hover{background:var(--hint)}
-
-@media(max-width:640px){
-  #sidebar{display:none}
-  .topbar{padding:1rem 1.25rem;min-height:64px}
-  .topbar-title{font-size:20px}
-  #content{padding:1.25rem}
-  .sys-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-  .co-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cluster 1 Portal</title>
+  <!-- Tailwind CSS CDN for rapid styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="h-full font-sans antialiased text-slate-900">
 
-<div id="auth-screen">
-  <div class="auth-card">
-    <h2 style="font-family: 'Syne'; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; font-size: 1.75rem;">PEZA Cluster 1 Portal</h2>
-    <p style="color: var(--muted); font-size: 0.875rem; margin-bottom: 2rem;">Cluster 1 Internal Document Hub</p>
-    
-    <div style="text-align: left; margin-bottom: 1rem;">
-      <label style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--text);">Access Passcode</label>
-      <input type="password" id="passcode-input" placeholder="••••••••" class="auth-input">
-      <p id="auth-error" class="auth-error-msg">Incorrect passcode. Please try again.</p>
-    </div>
-    
-    <button onclick="checkAuth()" class="auth-btn">Verify Identity</button>
-  </div>
-</div>
-
-<div id="app-wrapper">
-
-  <nav id="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-badge">
-        <div class="brand-dot"></div>
-        <span class="brand-label">PEZA</span>
-      </div>
-      <div class="brand-title">Cluster 1 Portal</div>
-      <div class="brand-sub">Cluster 1 Procedures</div>
-    </div>
-
-    <div class="nav-section">Navigation</div>
-    <a class="nav-item active" onclick="switchSection('systems',this)" href="#">
-      <span class="nav-icon">⬡</span> Systems &amp; Portals
-      <span class="nav-count">18</span>
-    </a>
-    <a class="nav-item" onclick="switchSection('documents',this)" href="#">
-      <span class="nav-icon">◈</span> Documents &amp; Files
-      <span class="nav-count">13</span>
-    </a>
-    <a class="nav-item" onclick="switchSection('ledgers',this)" href="#">
-      <span class="nav-icon">◉</span> e-Subsidiary Ledgers
-      <span class="nav-count">23</span>
-    </a>
-    <a class="nav-item" onclick="switchSection('auth',this)" href="#">
-      <span class="nav-icon">◎</span> Auth. Signatories
-      <span class="nav-count">34</span>
-    </a>
-    <a class="nav-item" onclick="switchSection('references',this)" href="#">
-      <span class="nav-icon">◇</span> References &amp; MOs
-      <span class="nav-count">20</span>
-    </a>
-    <a class="nav-item" onclick="switchSection('sez',this)" href="#">
-      <span class="nav-icon">◆</span> SEZ &amp; IT Links
-      <span class="nav-count">14</span>
-    </a>
-    <a class="nav-item" onclick="switchSection('tutorials',this)" href="#">
-      <span class="nav-icon">○</span> Tutorials &amp; Manuals
-      <span class="nav-count">5</span>
-    </a>
-
-    <div class="sidebar-footer">
-      <p>PEZA Cluster 1 Examiner<br>IT Parks · SEZ · Head Office<br>For internal use only</p>
-    </div>
-  </nav>
-
-  <div id="main">
-
-    <div class="topbar">
-      <div>
-        <div class="topbar-title" id="topbar-title">Systems &amp; Portals</div>
-        <div class="topbar-sub" id="topbar-sub">Online systems used for PEZA Cluster 1 examination</div>
-      </div>
-      <div class="topbar-right">
-        <button class="tab-pill active" onclick="switchSite('examiner',this)">IT Parks</button>
-        <button class="tab-pill" onclick="switchSite('sez-tab',this)">SEZ &amp; IT</button>
-      </div>
-    </div>
-
-    <div id="content">
-
-      <div class="section active" id="sec-systems">
-        <div id="sys-examiner">
-          <div class="sec-head">
-            <div class="sec-head-icon" style="background:var(--accent-dim)">⬡</div>
-            <h2>Core systems — IT Parks</h2>
-            <span>18 portals</span>
-          </div>
-          <div class="sys-grid">
-            <a href="https://pezaezts.ekonek.com/ezts-it-parks/EkonekLogin" target="_blank" class="sys-card v-green">
-              <div class="sys-card-top"><span class="sys-tag">EZTS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">Ekonek IT Parks</div>
-              <div class="sys-desc">e-Zone Transaction System login</div>
-            </a>
-            <a href="https://pezaapps.ekonek.com/eips/ipmain.jsp" target="_blank" class="sys-card v-blue">
-              <div class="sys-card-top"><span class="sys-tag">EIPS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">IP Main Portal</div>
-              <div class="sys-desc">Import/Export processing</div>
-            </a>
-            <a href="https://pezaaeds.ekonek.com/login" target="_blank" class="sys-card v-purple">
-              <div class="sys-card-top"><span class="sys-tag">AEDS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">AEDS Login</div>
-              <div class="sys-desc">Annual Enterprise Data System</div>
-            </a>
-            <a href="https://pezatradev2.intercommerce.com.ph/home" target="_blank" class="sys-card v-amber">
-              <div class="sys-card-top"><span class="sys-tag">TRADEV2</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">Intercommerce V2</div>
-              <div class="sys-desc">Trade portal (dev)</div>
-            </a>
-            <a href="http://peza.intercommerce.com.ph/ip.asp?filby=forApp" target="_blank" class="sys-card v-amber">
-              <div class="sys-card-top"><span class="sys-tag">INTER</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PEZA Intercommerce</div>
-              <div class="sys-desc">IP application portal</div>
-            </a>
-            <a href="https://peza.etrade.net.ph/dashboard" target="_blank" class="sys-card v-green">
-              <div class="sys-card-top"><span class="sys-tag">ETRADE</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">eTrade Dashboard</div>
-              <div class="sys-desc">Electronic trade platform</div>
-            </a>
-            <a href="https://ptops.ph/dashboard" target="_blank" class="sys-card v-blue">
-              <div class="sys-card-top"><span class="sys-tag">PTOPS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PTOPS Dashboard</div>
-              <div class="sys-desc">PEZA operations portal</div>
-            </a>
-            <a href="https://webapps.peza.gov.ph/cpis/login.php" target="_blank" class="sys-card v-rose">
-              <div class="sys-card-top"><span class="sys-tag">CPIS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">CPIS Login</div>
-              <div class="sys-desc">Certificate of Payment</div>
-            </a>
-            <a href="https://mdr.dev.peza.gov.ph/main/dashboard/index.php" target="_blank" class="sys-card v-rose">
-              <div class="sys-card-top"><span class="sys-tag">MDR</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">MDR Dashboard</div>
-              <div class="sys-desc">Monthly data reporting</div>
-            </a>
-            <a href="https://webapps.peza.gov.ph/ezmpr/index.php" target="_blank" class="sys-card v-purple">
-              <div class="sys-card-top"><span class="sys-tag">EZMPR</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">EZMPR Portal</div>
-              <div class="sys-desc">Monthly progress report</div>
-            </a>
-            <a href="https://acms.peza.gov.ph/main/pages/authentication/split/index.php" target="_blank" class="sys-card v-green">
-              <div class="sys-card-top"><span class="sys-tag">ACMS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">ACMS Login</div>
-              <div class="sys-desc">Accounts collection mgmt</div>
-            </a>
-            <a href="http://pisces.peza.gov.ph" target="_blank" class="sys-card v-blue">
-              <div class="sys-card-top"><span class="sys-tag">PISCES</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PISCES System</div>
-              <div class="sys-desc">PEZA locator management</div>
-            </a>
-            <a href="http://els.peza.gov.ph" target="_blank" class="sys-card v-amber">
-              <div class="sys-card-top"><span class="sys-tag">ELS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">ELS Portal</div>
-              <div class="sys-desc">Electronic ledger system</div>
-            </a>
-            <a href="https://peza-ifms.intertribehosting.com/" target="_blank" class="sys-card v-purple">
-              <div class="sys-card-top"><span class="sys-tag">IFMS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PEZA IFMS</div>
-              <div class="sys-desc">Integrated financial mgmt</div>
-            </a>
-            <a href="https://outlook.office.com/mail/" target="_blank" class="sys-card v-blue">
-              <div class="sys-card-top"><span class="sys-tag">EMAIL</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">Outlook Mail</div>
-              <div class="sys-desc">Official email</div>
-            </a>
-            <a href="https://epay.peza.gov.ph/pezaportal/Transactions/AddTransaction/CreateOP" target="_blank" class="sys-card v-rose">
-              <div class="sys-card-top"><span class="sys-tag">EPAY</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">ePay – Create OP</div>
-              <div class="sys-desc">Order of payment portal</div>
-            </a>
-            <a href="https://www.peza.gov.ph/telephone-directory" target="_blank" class="sys-card v-amber">
-              <div class="sys-card-top"><span class="sys-tag">DIR</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PEZA Directory</div>
-              <div class="sys-desc">Staff phone directory</div>
-            </a>
-            <a href="https://ptops.ph/" target="_blank" class="sys-card v-green">
-              <div class="sys-card-top"><span class="sys-tag">PTOPS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PTOPS Main</div>
-              <div class="sys-desc">Main operations site</div>
-            </a>
-          </div>
+  <div class="flex h-screen overflow-hidden">
+    <!-- 1. LEFT SIDEBAR NAVIGATION -->
+    <aside class="hidden md:flex md:w-64 md:flex-col bg-slate-900 text-white">
+      <div class="flex flex-col flex-1 min-h-0">
+        <!-- Portal Branding Header -->
+        <div class="flex items-center h-16 px-6 bg-slate-950 font-bold tracking-wide border-b border-slate-800">
+          CLUSTER 1 PORTAL
         </div>
-
-        <div id="sys-sez" style="display:none">
-          <div class="sec-head">
-            <div class="sec-head-icon" style="background:var(--accent2-dim)">◆</div>
-            <h2>Core systems — SEZ &amp; IT</h2>
-            <span>14 portals</span>
-          </div>
-          <div class="sys-grid">
-            <a href="https://epay.peza.gov.ph/peza" target="_blank" class="sys-card v-rose">
-              <div class="sys-card-top"><span class="sys-tag">EPAY</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PEZA ePay</div>
-              <div class="sys-desc">Online payment portal</div>
-            </a>
-            <a href="http://pisces.peza.gov.ph/" target="_blank" class="sys-card v-blue">
-              <div class="sys-card-top"><span class="sys-tag">PISCES</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PISCES System</div>
-              <div class="sys-desc">Locator management</div>
-            </a>
-            <a href="https://webapps.peza.gov.ph/ezmpr/index.php" target="_blank" class="sys-card v-purple">
-              <div class="sys-card-top"><span class="sys-tag">EZMPR</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">EZMPR Portal</div>
-              <div class="sys-desc">Monthly progress report</div>
-            </a>
-            <a href="https://pezaezts.ekonek.com/" target="_blank" class="sys-card v-green">
-              <div class="sys-card-top"><span class="sys-tag">EZTS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PEZA EZTS</div>
-              <div class="sys-desc">e-Zone Transaction System</div>
-            </a>
-            <a href="https://pezaapps.ekonek.com/eips/ipmain.jsp" target="_blank" class="sys-card v-blue">
-              <div class="sys-card-top"><span class="sys-tag">EIPS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">EIPS Portal</div>
-              <div class="sys-desc">Import/Export processing</div>
-            </a>
-            <a href="https://pezaaeds.ekonek.com/login" target="_blank" class="sys-card v-amber">
-              <div class="sys-card-top"><span class="sys-tag">AEDS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">AEDS Login</div>
-              <div class="sys-desc">Annual Enterprise Data</div>
-            </a>
-            <a href="http://ears.peza.gov.ph/#/input" target="_blank" class="sys-card v-rose">
-              <div class="sys-card-top"><span class="sys-tag">EARS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">EARS Input</div>
-              <div class="sys-desc">Enterprise annual report</div>
-            </a>
-            <a href="https://ptops.ph/login" target="_blank" class="sys-card v-green">
-              <div class="sys-card-top"><span class="sys-tag">PTOPS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PTOPS Login</div>
-              <div class="sys-desc">PEZA operations portal</div>
-            </a>
-            <a href="https://els.peza.gov.ph" target="_blank" class="sys-card v-purple">
-              <div class="sys-card-top"><span class="sys-tag">ELS</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">ELS Portal</div>
-              <div class="sys-desc">Electronic ledger system</div>
-            </a>
-            <a href="https://login.intercommerce.com.ph/login" target="_blank" class="sys-card v-amber">
-              <div class="sys-card-top"><span class="sys-tag">INTER</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">Intercommerce Login</div>
-              <div class="sys-desc">Trade portal</div>
-            </a>
-            <a href="https://www.etrade.net.ph/etrade-2.0/login/auth" target="_blank" class="sys-card v-blue">
-              <div class="sys-card-top"><span class="sys-tag">ETRADE</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">eTrade Login</div>
-              <div class="sys-desc">Electronic trade portal</div>
-            </a>
-            <a href="https://www.peza.gov.ph/" target="_blank" class="sys-card v-green">
-              <div class="sys-card-top"><span class="sys-tag">MAIN</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PEZA.gov.ph</div>
-              <div class="sys-desc">Official PEZA website</div>
-            </a>
-            <a href="https://www.peza.gov.ph/telephone-directory" target="_blank" class="sys-card v-amber">
-              <div class="sys-card-top"><span class="sys-tag">DIR</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">PEZA Directory</div>
-              <div class="sys-desc">Staff phone directory</div>
-            </a>
-            <a href="https://citizenscharter.gov.ph/artemis/citizen-charter/view/report?cc_id=DPtvLZRe5YqpAfpumeQ2" target="_blank" class="sys-card v-rose">
-              <div class="sys-card-top"><span class="sys-tag">CHARTER</span><span class="sys-arrow">↗</span></div>
-              <div class="sys-name">Citizen Charter</div>
-              <div class="sys-desc">ARTEMIS service charter</div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="section" id="sec-documents">
-         <div class="empty">Documents content area</div>
-      </div>
-      <div class="section" id="sec-ledgers">
-         <div class="empty">e-Subsidiary Ledgers workspace data</div>
-      </div>
-      <div class="section" id="sec-auth">
-         <div class="empty">Authorized Signatories data registry</div>
-      </div>
-      
-      <div class="section" id="sec-sez">
-        <div class="sec-head">
-          <div class="sec-head-icon" style="background:var(--accent2-dim)">◆</div>
-          <h2>Resource Nodes &amp; Hubs</h2>
-          <span>2 directories</span>
-        </div>
-        <div class="sys-grid">
-          <a href="https://sites.google.com/view/peza-examiner/home" target="_blank" class="sys-card v-blue">
-            <div class="sys-card-top"><span class="sys-tag">HUB</span><span class="sys-arrow">↗</span></div>
-            <div class="sys-name">PEZA Examiner Home</div>
-            <div class="sys-desc">Centralized examiner portal and resource directory</div>
+        <!-- Navigation Items -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+          <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-indigo-600 text-white transition">
+            Dashboard Hub
           </a>
-          <a href="https://sites.google.com/view/peza-gap/home" target="_blank" class="sys-card v-purple">
-            <div class="sys-card-top"><span class="sys-tag">GAP</span><span class="sys-arrow">↗</span></div>
-            <div class="sys-name">PEZA GAP Portal</div>
-            <div class="sys-desc">Audit procedures, guidelines, and reference nodes</div>
+          <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
+            Locator Directory
           </a>
-        </div>
+          <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
+            References & Issuances
+          </a>
+          <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
+            Trackers & Tools
+          </a>
+        </nav>
       </div>
+    </aside>
 
-      <div class="section" id="sec-tutorials">
-        <div class="sec-head">
-          <div class="sec-head-icon" style="background:var(--purple-dim)">○</div>
-          <h2>Guides &amp; External Hubs</h2>
-          <span>Reference Portals</span>
+    <!-- 2. MAIN CONTENT AREA -->
+    <div class="flex flex-col flex-1 overflow-hidden">
+      <!-- Main Content Header Bar -->
+      <header class="flex items-center justify-between h-16 px-6 bg-white border-b border-slate-200">
+        <h1 class="text-xl font-semibold tracking-tight text-slate-800">System Dashboard</h1>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+          Cluster 1 Active
+        </span>
+      </header>
+
+      <!-- Main Dynamic Viewport -->
+      <main class="flex-1 p-6 overflow-y-auto bg-slate-50">
+        <!-- Quick Informative Alert Banner -->
+        <div class="p-4 mb-6 border-l-4 border-amber-500 bg-amber-50 rounded-r-lg">
+          <p class="text-sm text-amber-800 font-medium">
+            Centralized Access Hub: Ensure you are logged into your enterprise credentials before launching the external application modules.
+          </p>
         </div>
-        <div class="link-group">
-          <div class="link-group-header">
-            <div class="lgh-dot" style="background:var(--purple)"></div>
-            <h3>Google Workspace Directories</h3>
-            <span class="lgh-count">2 Hubs Available</span>
+
+        <!-- CARD GRID: Core PEZA Apps & External Portals -->
+        <section class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          
+          <!-- Sample Grid Card for a System Link -->
+          <div class="flex flex-col justify-between p-6 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+            <div>
+              <div class="w-10 h-10 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-lg font-bold">
+                EZ
+              </div>
+              <h3 class="mt-4 text-base font-semibold text-slate-900">EZTS System</h3>
+              <p class="mt-1 text-sm text-slate-500">Electronic Zone Transfer System monitoring and transaction logs.</p>
+            </div>
+            <div class="mt-6">
+              <a href="#" target="_blank" class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition">
+                Launch Application
+              </a>
+            </div>
           </div>
-          <a href="https://sites.google.com/view/peza-examiner/home" target="_blank" class="link-row">
-            <span class="lr-name">PEZA Examiner Portal (Main Directory)</span>
-            <span class="lr-tag" style="background:var(--accent-dim); color:var(--accent)">EXAMINER</span>
-            <span class="lr-arr">↗</span>
-          </a>
-          <a href="https://sites.google.com/view/peza-gap/home" target="_blank" class="link-row">
-            <span class="lr-name">PEZA GAP Guidelines &amp; Audit Reference</span>
-            <span class="lr-tag" style="background:var(--purple-dim); color:var(--purple)">GAP</span>
-            <span class="lr-arr">↗</span>
-          </a>
-        </div>
-      </div>
 
+          <!-- Add more action cards here for PISCES, ACMS, Web Customs, etc. -->
+
+        </section>
+      </main>
     </div>
   </div>
-</div>
 
-<script>
-const sectionMeta={
-  systems:{title:'Systems & Portals',sub:'Online systems used for PEZA Cluster 1 examination'},
-  documents:{title:'Documents & Files',sub:'Shared spreadsheets, forms, and cloud folders'},
-  ledgers:{title:'e-Subsidiary Ledgers',sub:'Monitoring and diagnostic subsidiary ledgers'},
-  auth:{title:'Authorized Signatories',sub:'Lists of registered enterprise & permit-to-locate processors'},
-  references:{title:'References & MOs',sub:'Memorandum orders and circulars'},
-  sez:{title:'SEZ & IT Links',sub:'Portals and resources for SEZ and IT examinations'},
-  tutorials:{title:'Tutorials & Manuals',sub:'Presentations, guides, and user manuals'},
-};
-let currentSite='examiner';
-
-function switchSection(id,el){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  
-  const targetSec = document.getElementById('sec-'+id);
-  if(targetSec) targetSec.classList.add('active');
-  if(el) el.classList.add('active');
-  
-  const m=sectionMeta[id];
-  if(m) {
-    document.getElementById('topbar-title').textContent=m.title;
-    document.getElementById('topbar-sub').textContent=m.sub;
-  }
-  if(id==='systems') applySiteToSystems();
-  return false;
-}
-
-function switchSite(site,btn){
-  document.querySelectorAll('.tab-pill').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  currentSite=site=='sez-tab'?'sez':'examiner';
-  applySiteToSystems();
-}
-
-function applySiteToSystems(){
-  const examiner=document.getElementById('sys-examiner');
-  const sez=document.getElementById('sys-sez');
-  if(currentSite==='examiner'){
-    if(examiner) examiner.style.display='block';
-    if(sez) sez.style.display='none';
-  } else {
-    if(examiner) examiner.style.display='none';
-    if(sez) sez.style.display='block';
-  }
-}
-
-/* GATEKEEPER PASSCODE SECURITY MODULE */
-const TARGET_PASSCODE = "pezaCluster1Secure2026"; 
-
-function checkAuth() {
-  const inputField = document.getElementById('passcode-input');
-  const errorMsg = document.getElementById('auth-error');
-  
-  if (inputField.value === TARGET_PASSCODE) {
-    sessionStorage.setItem('portal_authorized', 'true');
-    showDashboard();
-  } else {
-    errorMsg.style.display = 'block';
-    inputField.value = "";
-    inputField.focus();
-  }
-}
-
-function showDashboard() {
-  const authScreen = document.getElementById('auth-screen');
-  const appWrapper = document.getElementById('app-wrapper');
-  
-  if (authScreen) authScreen.style.display = 'none';
-  if (appWrapper) appWrapper.style.display = 'flex';
-}
-
-if (sessionStorage.getItem('portal_authorized') === 'true') {
-  showDashboard();
-}
-
-document.getElementById('passcode-input').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    checkAuth();
-  }
-});
-</script>
 </body>
 </html>
