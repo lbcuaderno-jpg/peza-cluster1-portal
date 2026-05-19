@@ -21,6 +21,7 @@ module.exports = async function handler(req, res) {
     }
 
     const { system_name, category, url, access_level, site, description, color } = req.body || {};
+    const { section } = req.body || {};
     if (!system_name || !category || !url || !site) {
       res.status(400).json({ error: 'Required fields are missing' });
       return;
@@ -33,8 +34,8 @@ module.exports = async function handler(req, res) {
     }
 
     await run(
-      'UPDATE systems SET system_name = ?, category = ?, url = ?, access_level = ?, site = ?, description = ?, color = ? WHERE id = ?',
-      [system_name, category, url, access_level || 'Staff', site, description || '', color || 'v-blue', id]
+      'UPDATE systems SET system_name = ?, category = ?, url = ?, access_level = ?, site = ?, section = ?, description = ?, color = ? WHERE id = ?',
+      [system_name, category, url, access_level || 'Staff', site, section || 'systems', description || '', color || 'v-blue', id]
     );
 
     res.status(200).json({});

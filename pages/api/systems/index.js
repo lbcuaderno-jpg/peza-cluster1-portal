@@ -8,7 +8,8 @@ function requireAuth(req) {
 
 module.exports = async function handler(req, res) {
   if (req.method === 'GET') {
-    const systems = await all('SELECT * FROM systems ORDER BY archived ASC, created_at DESC');
+    const section = req.query.section || 'systems';
+    const systems = await all('SELECT * FROM systems WHERE section = ? ORDER BY archived ASC, created_at DESC', [section]);
     res.status(200).json({ systems });
     return;
   }
@@ -20,15 +21,15 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    const { system_name, category, url, access_level, site, description, color } = req.body || {};
+    const { system_name, category, url, access_level, site, description, color, section } = req.body || {};
     if (!system_name || !category || !url || !site) {
       res.status(400).json({ error: 'Required fields are missing' });
       return;
     }
 
     const result = await run(
-      'INSERT INTO systems (system_name, category, url, access_level, site, description, color, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [system_name, category, url, access_level || 'Staff', site, description || '', color || 'v-blue', Date.now()]
+      'INSERT INTO systems (system_name, category, url, access_level, site, description, color, section, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [system_name, category, url, access_level || 'Staff', site, description || '', color || 'v-blue', section || 'systems', Date.now()]
     );
 
     res.status(201).json({ id: result.lastID });

@@ -6,14 +6,26 @@ const initialForm = {
   url: '',
   access_level: 'Staff',
   site: 'examiner',
+  section: 'systems',
   description: '',
   color: 'v-blue'
+};
+
+const sectionLabels = {
+  systems: 'Systems & Portals',
+  documents: 'Documents & Files',
+  ledgers: 'e-Subsidiary Ledgers',
+  auth: 'Authorized Signatories',
+  references: 'References & MOs',
+  sez: 'SEZ & IT Links',
+  tutorials: 'Tutorials & Manuals'
 };
 
 function Home() {
   const [systems, setSystems] = useState([]);
   const [search, setSearch] = useState('');
   const [site, setSite] = useState('examiner');
+  const [section, setSection] = useState('systems');
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -25,8 +37,11 @@ function Home() {
 
   useEffect(() => {
     fetchUser();
-    fetchSystems();
   }, []);
+
+  useEffect(() => {
+    fetchSystems();
+  }, [section]);
 
   async function fetchUser() {
     const resp = await fetch('/api/auth/me');
@@ -37,7 +52,7 @@ function Home() {
   }
 
   async function fetchSystems() {
-    const resp = await fetch('/api/systems');
+    const resp = await fetch(`/api/systems?section=${encodeURIComponent(section)}`);
     const data = await resp.json();
     if (!data.error) {
       setSystems(data.systems || []);
@@ -105,13 +120,14 @@ function Home() {
         url: system.url,
         access_level: system.access_level,
         site: system.site,
+        section: system.section || section,
         description: system.description,
         color: system.color
       });
     } else {
       setFormMode('add');
       setEditId(null);
-      setFormState(initialForm);
+      setFormState({ ...initialForm, section });
     }
     setAdminMessage('');
   }
@@ -173,12 +189,31 @@ function Home() {
               <div className="brand-label">PEZA</div>
               <h1>GAP Portal</h1>
             </div>
+            <div className="section-tabs">
+              {[
+                { key: 'systems', label: 'Systems & Portals' },
+                { key: 'documents', label: 'Documents & Files' },
+                { key: 'ledgers', label: 'e-Subsidiary Ledgers' },
+                { key: 'auth', label: 'Authorized Signatories' },
+                { key: 'references', label: 'References & MOs' },
+                { key: 'sez', label: 'SEZ & IT Links' },
+                { key: 'tutorials', label: 'Tutorials & Manuals' }
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  className={section === item.key ? 'tab active' : 'tab'}
+                  onClick={() => setSection(item.key)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
             <div className="topbar-right">
               <input
                 className="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search systems..."
+                placeholder="Search items..."
               />
               {user ? (
                 <>
@@ -197,10 +232,10 @@ function Home() {
         </header>
 
         <section className="summary">
-          <div>{activeSystems.length} active portals{isAdmin ? ` · ${archivedSystems.length} archived` : ''}</div>
+          <div>{sectionLabels[section]} · {activeSystems.length} active{isAdmin ? ` · ${archivedSystems.length} archived` : ''}</div>
           <div className="summary-actions">
             {isAdmin && (
-              <button className="button" onClick={() => openForm(null)}>New system</button>
+              <button className="button" onClick={() => openForm(null)}>New item</button>
             )}
             {isAdmin && (
               <button className="button secondary" onClick={() => setShowArchived(!showArchived)}>
@@ -279,12 +314,17 @@ function Home() {
 
         {isAdmin && (
           <div className="panel">
-            <h3>{formMode === 'edit' ? 'Edit system' : 'Add system'}</h3>
+            <h3>{formMode === 'edit' ? `Edit ${sectionLabels[section]}` : `Add ${sectionLabels[section]}`}</h3>
             <form onSubmit={handleSave}>
               <div className="form-grid">
                 <label>System name<input value={formState.system_name} onChange={(e) => setFormState({ ...formState, system_name: e.target.value })} required /></label>
                 <label>Category<input value={formState.category} onChange={(e) => setFormState({ ...formState, category: e.target.value })} required /></label>
                 <label>URL<input value={formState.url} onChange={(e) => setFormState({ ...formState, url: e.target.value })} required /></label>
+                <label>Section<select value={formState.section} onChange={(e) => setFormState({ ...formState, section: e.target.value })}>
+                  {Object.entries(sectionLabels).map(([key,label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select></label>
                 <label>Site<select value={formState.site} onChange={(e) => setFormState({ ...formState, site: e.target.value })}>
                   <option value="examiner">IT Parks</option>
                   <option value="sez">SEZ & IT</option>
@@ -332,6 +372,8 @@ function Home() {
         .tab { border: 1px solid var(--border); background: var(--card); padding: 10px 16px; border-radius: 999px; cursor: pointer; }
         .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
         .summary { display: flex; justify-content: space-between; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 18px; border-radius: 18px; margin-bottom: 18px; }
+        .section-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .section-tabs .tab { background: #f8fafc; }
         .summary-actions { display: flex; gap: 10px; flex-wrap: wrap; }
         .secondary { background: #64748b; }
         .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
