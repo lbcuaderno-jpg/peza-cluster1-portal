@@ -580,14 +580,50 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
       <div class="section" id="sec-auth">
          <div class="empty">Authorized Signatories data registry</div>
       </div>
-      <div class="section" id="sec-references">
-         <div class="empty">Memorandum orders & circular references records</div>
-      </div>
+      
       <div class="section" id="sec-sez">
-         <div class="empty">SEZ & IT Resource node directory mappings</div>
+        <div class="sec-head">
+          <div class="sec-head-icon" style="background:var(--accent2-dim)">◆</div>
+          <h2>Resource Nodes &amp; Hubs</h2>
+          <span>2 directories</span>
+        </div>
+        <div class="sys-grid">
+          <a href="https://sites.google.com/view/peza-examiner/home" target="_blank" class="sys-card v-blue">
+            <div class="sys-card-top"><span class="sys-tag">HUB</span><span class="sys-arrow">↗</span></div>
+            <div class="sys-name">PEZA Examiner Home</div>
+            <div class="sys-desc">Centralized examiner portal and resource directory</div>
+          </a>
+          <a href="https://sites.google.com/view/peza-gap/home" target="_blank" class="sys-card v-purple">
+            <div class="sys-card-top"><span class="sys-tag">GAP</span><span class="sys-arrow">↗</span></div>
+            <div class="sys-name">PEZA GAP Portal</div>
+            <div class="sys-desc">Audit procedures, guidelines, and reference nodes</div>
+          </a>
+        </div>
       </div>
+
       <div class="section" id="sec-tutorials">
-         <div class="empty">User Guides, Tutorials & Educational Material</div>
+        <div class="sec-head">
+          <div class="sec-head-icon" style="background:var(--purple-dim)">○</div>
+          <h2>Guides &amp; External Hubs</h2>
+          <span>Reference Portals</span>
+        </div>
+        <div class="link-group">
+          <div class="link-group-header">
+            <div class="lgh-dot" style="background:var(--purple)"></div>
+            <h3>Google Workspace Directories</h3>
+            <span class="lgh-count">2 Hubs Available</span>
+          </div>
+          <a href="https://sites.google.com/view/peza-examiner/home" target="_blank" class="link-row">
+            <span class="lr-name">PEZA Examiner Portal (Main Directory)</span>
+            <span class="lr-tag" style="background:var(--accent-dim); color:var(--accent)">EXAMINER</span>
+            <span class="lr-arr">↗</span>
+          </a>
+          <a href="https://sites.google.com/view/peza-gap/home" target="_blank" class="link-row">
+            <span class="lr-name">PEZA GAP Guidelines &amp; Audit Reference</span>
+            <span class="lr-tag" style="background:var(--purple-dim); color:var(--purple)">GAP</span>
+            <span class="lr-arr">↗</span>
+          </a>
+        </div>
       </div>
 
     </div>
@@ -643,7 +679,6 @@ function applySiteToSystems(){
 }
 
 /* GATEKEEPER PASSCODE SECURITY MODULE */
-// Adjust 'pezaCluster1Secure2026' to your preferred office password!
 const TARGET_PASSCODE = "pezaCluster1Secure2026"; 
 
 function checkAuth() {
@@ -668,12 +703,10 @@ function showDashboard() {
   if (appWrapper) appWrapper.style.display = 'flex';
 }
 
-// Session persistent authentication checking on load
 if (sessionStorage.getItem('portal_authorized') === 'true') {
   showDashboard();
 }
 
-// Bind standard keyboard enter button listener
 document.getElementById('passcode-input').addEventListener('keypress', function(e) {
   if (e.key === 'Enter') {
     checkAuth();
